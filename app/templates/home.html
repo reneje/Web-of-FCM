@@ -1,0 +1,237 @@
+<html>
+	<head>
+		<title>Fuzzy C-Means Clustering</title>
+		<style>
+		
+		body {font-family: Arial, Helvetica, sans-serif;}
+
+		input[type=text], select, textarea {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			margin-top: 6px;
+			margin-bottom: 16px;
+			resize: vertical;
+		}
+
+		input[type=submit] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		
+		hr { background-color: green; height: 1px; border: 0; }
+		
+		.button {
+		background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 500px;
+		}
+
+		.container {
+			width: 500px;
+			clear: both;
+			}
+
+		.container input {
+		  width: 100%;
+		  clear: both;
+		}
+		
+		table {
+			border-collapse:collapse;
+		}
+		
+		
+	</style>
+	</head>
+	<body class="blurBg-false" style="background-color:#EBEBEB">
+		<h1 align="center">Fuzzy C-Means Cluster</h1>
+		<center>
+		<div class = "container">
+		 <form action = "http://localhost:5000/uploader" method = "POST" enctype="multipart/form-data">
+			 <input type = "text" name = "k" placeholder="Jumlah Cluster" />
+			 <input type = "text" name = "pangkat" placeholder = "Pangkat Pembobot" />
+			 <input type = "text" name = "iterasi" placeholder="Jumlah maksimal iterasi"/>
+			 <input type="file" name="myfile" placeholder="Pilih File"/>
+			 <p><input type = "submit" value = "KELOMPOKKAN"></p>
+		 </form>
+		 <a href="http://localhost:5000/index"><button class="button">HAPUS DATA</button></a>
+		 <br/><br/>
+		 </div>
+		 
+		</center>
+		
+
+		
+	   {% if k %}
+	  <div id="myDIV">
+		<center>
+		  <hr /> 
+		  <b>Fuzzy C-Means Cluster dengan parameter:<b></br>
+		  Jumlah Cluster: {{k}}, Pangkat Pembobot: {{pangkat}}, Jumlah Maximal Iterasi : {{iterasi}}, File : {{filename}}</br></br>
+		  <h1>Centroid: </h1></br>
+			
+		    <table class="test" border=1 >
+			
+				<!-- header nya aja -->
+				<tr>
+					{% for k in range(k) %}
+							<th width="48%" align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
+						
+				    {% endfor %}
+				</tr>
+	
+				
+				{% for result in centroid %}
+				<tr style="background-color:#ccffcc">
+					{% for elem in result %}
+						<td width="48%" align="right"}>{{elem}}</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+				
+			</table>
+			</br>
+		  <h1>Datapoint:</h1></br>
+		   <table border = 1 class="test2">
+				<!-- header nya aja -->
+				<tr>
+					{% for k in range(k) %}
+							<th width="48%" align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
+						
+				    {% endfor %}
+				</tr>
+				
+				{% for result in datapoint %}
+				<tr style="background-color:#ccffcc">
+					{% for elem in result %}
+						<td width="48%" align="right">{{elem}}</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+				
+			</table>
+			</br>
+			
+		  <h1>Hasil Cluster </h1> </br>
+		  
+			 Evaluasi - XB Index : {{eval}} </br>
+			<p><button id="btnExport" onclick="javascript:xport.toCSV('tabel_hasil');"> Eksport ke CSV</button> <em>&nbsp;&nbsp;&nbsp;Eksport hasil cluster ke CSV</em>
+			  </p>
+
+		<table border=1 id="tabel_hasil">
+		    <tr width="48%" align="center" style="background-color:#4CAF50">
+				<td><font color="white">Data ke - </font></td> 
+				<td><font color="white">Cluster</font></td>
+			</tr>
+			{% for key, value in dict_cluster.items() %}
+			<tr style="background-color:#ccffcc">
+			<td width="48%">{{ key|e }}</td>
+			<td width="48%" align="center">{{ value|e }}</td>
+			</tr>
+			{% endfor %}
+			
+		 </table>
+		</center>
+		
+		</div>
+	  {% endif %}
+	  
+		
+		
+		<script>
+			var xport = {
+				  _fallbacktoCSV: true,  
+				  toCSV: function(tableId, filename) {
+					this._filename = (typeof filename === 'undefined') ? tableId : filename;
+					// Generate our CSV string from out HTML Table
+					var csv = this._tableToCSV(document.getElementById(tableId));
+					// Create a CSV Blob
+					var blob = new Blob([csv], { type: "text/csv" });
+
+					// Determine which approach to take for the download
+					if (navigator.msSaveOrOpenBlob) {
+					  // Works for Internet Explorer and Microsoft Edge
+					  navigator.msSaveOrOpenBlob(blob, this._filename + ".csv");
+					} else {      
+					  this._downloadAnchor(URL.createObjectURL(blob), 'csv');      
+					}
+				  },
+				  _getMsieVersion: function() {
+					var ua = window.navigator.userAgent;
+
+					var msie = ua.indexOf("MSIE ");
+					if (msie > 0) {
+					  // IE 10 or older => return version number
+					  return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)), 10);
+					}
+
+					var trident = ua.indexOf("Trident/");
+					if (trident > 0) {
+					  // IE 11 => return version number
+					  var rv = ua.indexOf("rv:");
+					  return parseInt(ua.substring(rv + 3, ua.indexOf(".", rv)), 10);
+					}
+
+					var edge = ua.indexOf("Edge/");
+					if (edge > 0) {
+					  // Edge (IE 12+) => return version number
+					  return parseInt(ua.substring(edge + 5, ua.indexOf(".", edge)), 10);
+					}
+
+					// other browser
+					return false;
+				  },
+				  _isFirefox: function(){
+					if (navigator.userAgent.indexOf("Firefox") > 0) {
+					  return 1;
+					}
+					
+					return 0;
+				  },
+				  _downloadAnchor: function(content, ext) {
+					  var anchor = document.createElement("a");
+					  anchor.style = "display:none !important";
+					  anchor.id = "downloadanchor";
+					  document.body.appendChild(anchor);
+
+					  // If the [download] attribute is supported, try to use it
+					  
+					  if ("download" in anchor) {
+						anchor.download = this._filename + "." + ext;
+					  }
+					  anchor.href = content;
+					  anchor.click();
+					  anchor.remove();
+				  },
+				  _tableToCSV: function(table) {
+					// We'll be co-opting `slice` to create arrays
+					var slice = Array.prototype.slice;
+
+					return slice
+					  .call(table.rows)
+					  .map(function(row) {
+						return slice
+						  .call(row.cells)
+						  .map(function(cell) {
+							return '"t"'.replace("t", cell.textContent);
+						  })
+						  .join(",");
+					  })
+					  .join("\r\n");
+				  }
+				};
+			</script>
+
+	  </body>
+</html>
