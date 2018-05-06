@@ -35,13 +35,13 @@ def proses_cluster(k, pangkat, iterasi, path_filename):
 	
 	objective_function = 0
 	for iteration in range (0,max_iteration):
-		centroid = fcm.countCentroid(data,cluster,feature,jumlah_klaster)
-
+		centroid = fcm.countCentroid(data,cluster,feature,jumlah_klaster,m)
+    
 		distances = fcm.get_distance(data,centroid,jumlah_data,jumlah_klaster)
-
+		
 		datapoint = fcm.get_newCluster(distances,jumlah_data,jumlah_klaster,m)
-
-		fungsi_objectif = fcm.get_objective_function(data,centroid,datapoint,jumlah_data,jumlah_klaster,feature)
+		
+		fungsi_objectif = fcm.get_objective_function(data,centroid,datapoint,jumlah_data,jumlah_klaster,feature,m)
 
 		if objective_function == fungsi_objectif:
 			break
@@ -73,7 +73,7 @@ def upload_file():
 		iterasi = int(request.form['iterasi'])
 		file = request.files['myfile']
 		filename = secure_filename(file.filename)
-		path = "E:/Master Study/Semester 2/ML/Tugas kelompok/Web/data/"
+		path = "E:/Master Study/Semester 2/ML/Tugas kelompok/Web-of-FCM/data/"
 		path_filename =  path + filename
 		centroid, distances, datapoint, cluster, jumlah_data, dim = proses_cluster(k, pangkat, iterasi, path_filename)
 		ke_klaster = []
@@ -87,12 +87,7 @@ def upload_file():
 		index_str =  [str(j+1) for j in index]
 		cl = [int(j) for j in ke_klaster]
 		dict_cluster = dict(zip(index_str, cl))	
-		#json_cluster = json.dumps(dict_cluster, indent=2, separators=(', ', ': '))
 		
-		'''
-		df = pd.DataFrame(datapoint)
-		dt_html = df.to_html()
-		'''
 		#ganti format np.array ke list
 		r_centroid = np.round(centroid,3)
 		list_centroid = r_centroid.tolist()

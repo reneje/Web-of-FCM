@@ -1,58 +1,8 @@
 <html>
 	<head>
 		<title>Fuzzy C-Means Clustering</title>
-		<style>
+		<link rel="stylesheet" type="text/css" href="/static/mystyle.css">
 		
-		body {font-family: Arial, Helvetica, sans-serif;}
-
-		input[type=text], select, textarea {
-			width: 100%;
-			padding: 12px;
-			border: 1px solid #ccc;
-			border-radius: 4px;
-			box-sizing: border-box;
-			margin-top: 6px;
-			margin-bottom: 16px;
-			resize: vertical;
-		}
-
-		input[type=submit] {
-			background-color: #4CAF50;
-			color: white;
-			padding: 12px 20px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-		}
-		
-		hr { background-color: green; height: 1px; border: 0; }
-		
-		.button {
-		background-color: #4CAF50;
-			color: white;
-			padding: 12px 20px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			width: 500px;
-		}
-
-		.container {
-			width: 500px;
-			clear: both;
-			}
-
-		.container input {
-		  width: 100%;
-		  clear: both;
-		}
-		
-		table {
-			border-collapse:collapse;
-		}
-		
-		
-	</style>
 	</head>
 	<body class="blurBg-false" style="background-color:#EBEBEB">
 		<h1 align="center">Fuzzy C-Means Cluster</h1>
@@ -86,7 +36,7 @@
 				<!-- header nya aja -->
 				<tr>
 					{% for k in range(k) %}
-							<th width="48%" align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
+							<th align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
 						
 				    {% endfor %}
 				</tr>
@@ -95,7 +45,7 @@
 				{% for result in centroid %}
 				<tr style="background-color:#ccffcc">
 					{% for elem in result %}
-						<td width="48%" align="right"}>{{elem}}</td>
+						<td align="right"}>{{elem}}</td>
 					{% endfor %}
 				</tr>
 				{% endfor %}
@@ -107,7 +57,7 @@
 				<!-- header nya aja -->
 				<tr>
 					{% for k in range(k) %}
-							<th width="48%" align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
+							<th align="center" style="background-color:#4CAF50"><font color="white">Cluster - {{loop.index}}</font></th>
 						
 				    {% endfor %}
 				</tr>
@@ -115,7 +65,7 @@
 				{% for result in datapoint %}
 				<tr style="background-color:#ccffcc">
 					{% for elem in result %}
-						<td width="48%" align="right">{{elem}}</td>
+						<td align="right">{{elem}}</td>
 					{% endfor %}
 				</tr>
 				{% endfor %}

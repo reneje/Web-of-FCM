@@ -1,0 +1,48 @@
+		body {font-family: Arial, Helvetica, sans-serif;}
+
+		input[type=text], select, textarea {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			margin-top: 6px;
+			margin-bottom: 16px;
+			resize: vertical;
+		}
+
+		input[type=submit] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		
+		hr { background-color: green; height: 1px; border: 0; }
+		
+		.button {
+		background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 500px;
+		}
+
+		.container {
+			width: 500px;
+			clear: both;
+			}
+
+		.container input {
+		  width: 100%;
+		  clear: both;
+		}
+		
+		table {
+			border-collapse:collapse;
+		}
+		

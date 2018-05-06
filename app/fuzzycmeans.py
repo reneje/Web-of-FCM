@@ -12,18 +12,18 @@ def inisialisasiMatrik(jumlah_data,jumlah_klaster):
         membership_mat.append(temp_list)
     return membership_mat
 
-def countCentroid(data,cluster,feature,jumlah_klaster):
-	centroid = range(feature*jumlah_klaster)
-	centroid = np.reshape(centroid,(feature,jumlah_klaster))
-	centroid = np.float64(centroid)
-	for i in range(0,feature):
-		for j in range(0,jumlah_klaster):
-			a = np.matmul(np.transpose(data[:,i]),np.power(cluster[:,j],2))
-			b = sum(np.power(cluster[:,j],2))
-			hasil = a/b
-			centroid[i,j] = hasil
+def countCentroid(data,cluster,feature,jumlah_klaster,m):
+    centroid = range(feature*jumlah_klaster)
+    centroid = np.reshape(centroid,(feature,jumlah_klaster))
+    centroid = np.float64(centroid)
+    for i in range(0,feature):
+        for j in range(0,jumlah_klaster):
+            a = np.matmul(np.transpose(data[:,i]),np.power(cluster[:,j],m))
+            # print(a)
+            b = sum(np.power(cluster[:,j],2))
+            centroid[i,j] = a/b
     
-	return centroid
+    return centroid
 
 def get_distance(data,centroid,jumlah_data,jumlah_klaster):
     distances = range (jumlah_data*jumlah_klaster)
@@ -52,14 +52,14 @@ def get_newCluster(distances,jumlah_data,jumlah_klaster,m):
             datapoint[i,j] = a/b
     return datapoint
 
-def get_objective_function(data,centroid,datapoint,jumlah_data,jumlah_klaster,feature):
+def get_objective_function(data,centroid,datapoint,jumlah_data,jumlah_klaster,feature,m):
     fungsi_objektif = 0
     for i in range (0,jumlah_data):
         totcluster = 0
         for j in range (0,jumlah_klaster):
             totdata_center = 0
             for k in range(0,feature):
-                totdata_center += pow((data[i,k]-centroid[k,j]),2)
+                totdata_center += pow((data[i,k]-centroid[k,j]),m)
             totcluster += totdata_center * datapoint[i,j]
         fungsi_objektif += totcluster
     return fungsi_objektif
@@ -81,12 +81,9 @@ def get_siloute(datapoint,distances,centroid,jumlah_data,jumlah_klaster):
         pembilang +=a
     penyebut = [];
     for i in range(0,jumlah_klaster):
-        print(i)
         for j in range(i+1,jumlah_klaster):
-            print(i," ",j)
             y = pow((centroid[:,i]-centroid[:,j]),2)
             g = np.sqrt(np.sum(y))
-            print(g)
             penyebut.append(g)
     
     evaluasi = pembilang/(jumlah_data*np.min(penyebut))
