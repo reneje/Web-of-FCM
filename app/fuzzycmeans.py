@@ -71,13 +71,11 @@ def which_cluster(datapoint):
     return ke_klaster
 
 def get_siloute(datapoint,distances,centroid,jumlah_data,jumlah_klaster):
-    average = []
     pembilang = 0
     for i in range (0,jumlah_klaster):
         a = 0
         for j in range(0,jumlah_data):
             a += datapoint[j,i]*distances[j,i]
-        average.append(a)
         pembilang +=a
     penyebut = [];
     for i in range(0,jumlah_klaster):
